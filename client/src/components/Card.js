@@ -22,7 +22,7 @@ endEditing();
 
     dispatch({
       type: "CHANGE_CARD_TEXT",
-      payload: { cardId: card._id, cardText: text }
+      payload: { cardId: card?._id, cardText: text }
     });
   };
 
@@ -30,13 +30,13 @@ endEditing();
 
       dispatch({
         type: "DELETE_CARD",
-        payload: { cardId: card._id, listId }
+        payload: { cardId: card?._id, listId }
       });
   };
 
-    if (!editing) {
+    if (!editing && card) {
       return (
-        <Draggable draggableId={card._id} index={index}>
+        <Draggable draggableId={card?._id} index={index}>
           {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
@@ -51,7 +51,7 @@ endEditing();
                     <ion-icon name="create" />
                   </div>
                 </div>
-{card.text}
+{card?.text}
             </div>
           )}
         </Draggable>
@@ -59,7 +59,7 @@ endEditing();
     } else {
       return (
         <CardEditor
-          text={card.text}
+          text={card?.text}
           onSave={editCard}
           onDelete={deleteCard}
           onCancel={endEditing}

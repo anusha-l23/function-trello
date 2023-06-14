@@ -45,7 +45,8 @@ const List = ({ list, index, dispatch, listId }) => {
     });
   };
 
-  const deleteList = async ({ listId, list }) => {
+  const deleteList = async () => {
+    console.log(listId)
     dispatch({
       type: "DELETE_LIST",
       payload: { listId, cards: list.cards },
@@ -114,7 +115,7 @@ const List = ({ list, index, dispatch, listId }) => {
           <Droppable droppableId={list._id}>
             {(provided, _snapshot) => (
               <div ref={provided.innerRef} className="Lists-Cards">
-                {list.cards &&
+                {list.cards.length ?
                   list.cards.map((cardId, index) => (
                     <Card
                       key={cardId}
@@ -122,7 +123,7 @@ const List = ({ list, index, dispatch, listId }) => {
                       index={index}
                       listId={list._id}
                     />
-                  ))}
+                  )) : null}
 
                 {provided.placeholder}
 
