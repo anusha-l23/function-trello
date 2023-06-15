@@ -19,6 +19,8 @@ const List = ({ list, index, dispatch, listId }) => {
   const [editingTitle, setEditingTitle] = useState(false);
   const [title, setTitle] = useState("");
   const [addingCard, setAddingCard] = useState(false);
+  const [cards, setCards] = useState([]);
+//const [card, setCard] = useState("");
 
   const toggleAddingCard = () => {
     setAddingCard((prev) => !prev);
@@ -53,24 +55,23 @@ const List = ({ list, index, dispatch, listId }) => {
     });
   };
 
-  // useEffect(() => {
-  //   axios.get("http://localhost:3001/cards")
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       setCards(res.data);
-  //     })
-  //     .catch((error) => console.log(error));
-  // }, [cards]);
+  useEffect(() => {
+    axios.get("http://localhost:3001/cards")
+      .then((res) => {
+        console.log(res.data);
+        setCards(res.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
-  //   const handleAdd = async () => {
-  //     //const {cards} = list.cards;
-
-  // await addCard(cardText)
-  //       .then((res) => {
-  //         setState({card: state.card})
-  //       })
-  //       .catch((error) => console.log(error));
-  //   }
+    // const addCard = async () => {
+    //   //const {cards} = list.cards;
+    //   await axios.post("http://localhost:3001/cards/add", card)
+    //     .then((res) => {
+    //    console.log(res, "add card api");
+    //     })
+    //     .catch((error) => console.log(error));
+    // }
 
   return (
     <Draggable draggableId={list._id} index={index}>
@@ -115,11 +116,12 @@ const List = ({ list, index, dispatch, listId }) => {
           <Droppable droppableId={list._id}>
             {(provided, _snapshot) => (
               <div ref={provided.innerRef} className="Lists-Cards">
-                {list.cards.length ?
-                  list.cards.map((cardId, index) => (
+                {console.log(cards, "api")}
+                {cards.length ?
+                  cards.map((card, index) => (
                     <Card
-                      key={cardId}
-                      cardId={cardId}
+                      key={card._id}
+                      cardId={card}
                       index={index}
                       listId={list._id}
                     />

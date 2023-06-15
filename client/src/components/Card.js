@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import CardEditor from "./CardEditor";
 
-const Card = ({dispatch, listId, index, card}) => {
+const Card = ({dispatch, listId, index, card, cardId}) => {
   // state = {
   //   editing: false,
   // };
@@ -34,9 +34,9 @@ endEditing();
       });
   };
 
-    if (!editing && card) {
+    if (!editing && cardId) {
       return (
-        <Draggable draggableId={card?._id} index={index}>
+        <Draggable draggableId={cardId?._id} index={index}>
           {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
@@ -51,7 +51,7 @@ endEditing();
                     <ion-icon name="create" />
                   </div>
                 </div>
-{card?.text}
+{cardId.card}
             </div>
           )}
         </Draggable>
@@ -59,7 +59,7 @@ endEditing();
     } else {
       return (
         <CardEditor
-          text={card?.text}
+          text={cardId?.text}
           onSave={editCard}
           onDelete={deleteCard}
           onCancel={endEditing}
