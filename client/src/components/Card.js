@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import CardEditor from "./CardEditor";
+import axios from "axios";
 
 const Card = ({dispatch, listId, index, card, cardId}) => {
   // state = {
@@ -17,22 +18,46 @@ const [editing, setEditing] = useState(false);
 
   const endEditing = () => setEditing(false);
 
-  const editCard = async text => {
-endEditing();
+//   const editCard = async text => {
+// endEditing();
+//     dispatch({
+//       type: "CHANGE_CARD_TEXT",
+//       payload: { cardId: card?._id, cardText: text }
+//     });
+//   };
 
-    dispatch({
-      type: "CHANGE_CARD_TEXT",
-      payload: { cardId: card?._id, cardText: text }
-    });
-  };
 
-  const deleteCard = async () => {
+const editCard = async card => {
+  console.log(cardId, "put")
+  axios.put(`http://localhost:3001/cards/${cardId._id}`, {
+    card
+  })
+    .then((res) => {
+   console.log(res, "update card api");
+   //setCard({card: ""});
+    })
+    .catch((error) => console.log(error));
+}
 
-      dispatch({
-        type: "DELETE_CARD",
-        payload: { cardId: card?._id, listId }
-      });
-  };
+  // const deleteCard = async () => {
+
+  //     dispatch({
+  //       type: "DELETE_CARD",
+  //       payload: { cardId: card?._id, listId }
+  //     });
+  // };
+
+  const deleteCard = async card => {
+    console.log(cardId, "delete")
+    axios.delete(`http://localhost:3001/cards/${cardId._id}`, {
+      card
+    })
+      .then((res) => {
+     console.log(res, "deleted card api");
+     //setCard({card: ""});
+      })
+      .catch((error) => console.log(error));
+  }
 
     if (!editing && cardId) {
       return (

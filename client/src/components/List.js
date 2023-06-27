@@ -2,7 +2,7 @@ import "../styles/List.css";
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Droppable, Draggable } from "react-beautiful-dnd";
-//import { getCards } from "../services/taskServices";
+
 import Card from "./Card";
 import CardEditor from "./CardEditor";
 import ListEditor from "./ListEditor";
@@ -20,20 +20,21 @@ const List = ({ list, index, dispatch, listId }) => {
   const [title, setTitle] = useState("");
   const [addingCard, setAddingCard] = useState(false);
   const [cards, setCards] = useState([]);
-//const [card, setCard] = useState("");
+  const [card, setCard] = useState("");
+  //const [card, setCard] = useState("");
 
   const toggleAddingCard = () => {
     setAddingCard((prev) => !prev);
   };
 
-  const addCard = async cardText => {
-    toggleAddingCard();
-    const cardId = shortid.generate();
-    dispatch({
-      type: "ADD_CARD",
-      payload: { cardText, cardId, listId },
-    });
-  };
+  // const addCard = async cardText => {
+  //   toggleAddingCard();
+  //   const cardId = shortid.generate();
+  //   dispatch({
+  //     type: "ADD_CARD",
+  //     payload: { cardText, cardId, listId },
+  //   });
+  // };
 
   const toggleEditingTitle = () => setEditingTitle((prev) => !prev);
 
@@ -48,7 +49,7 @@ const List = ({ list, index, dispatch, listId }) => {
   };
 
   const deleteList = async () => {
-    console.log(listId)
+    console.log(listId);
     dispatch({
       type: "DELETE_LIST",
       payload: { listId, cards: list.cards },
@@ -56,7 +57,8 @@ const List = ({ list, index, dispatch, listId }) => {
   };
 
   useEffect(() => {
-    axios.get("http://localhost:3001/cards")
+    axios
+      .get("http://localhost:3001/cards")
       .then((res) => {
         console.log(res.data);
         setCards(res.data);
@@ -64,14 +66,19 @@ const List = ({ list, index, dispatch, listId }) => {
       .catch((error) => console.log(error));
   }, []);
 
-    // const addCard = async () => {
-    //   //const {cards} = list.cards;
-    //   await axios.post("http://localhost:3001/cards/add", card)
-    //     .then((res) => {
-    //    console.log(res, "add card api");
-    //     })
-    //     .catch((error) => console.log(error));
-    // }
+  const addCard = (card) => {
+    //const {cards} = list.cards;
+    axios
+      .post("http://localhost:3001/cards/add", {
+        method: "POST",
+        card,
+      })
+      .then((res) => {
+        console.log(res, "add card api");
+        //setCard({card: ""});
+      })
+      .catch((error) => console.log(error));
+  };
 
   return (
     <Draggable draggableId={list._id} index={index}>
@@ -117,15 +124,16 @@ const List = ({ list, index, dispatch, listId }) => {
             {(provided, _snapshot) => (
               <div ref={provided.innerRef} className="Lists-Cards">
                 {console.log(cards, "api")}
-                {cards.length ?
-                  cards.map((card, index) => (
-                    <Card
-                      key={card._id}
-                      cardId={card}
-                      index={index}
-                      listId={list._id}
-                    />
-                  )) : null}
+                {cards.length
+                  ? cards.map((card, index) => (
+                      <Card
+                        key={card._id}
+                        cardId={card}
+                        index={index}
+                        listId={list._id}
+                      />
+                    ))
+                  : null}
 
                 {provided.placeholder}
 

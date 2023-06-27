@@ -8,9 +8,13 @@ exports.getCards = (req, res) => {
 };
 
 exports.addCard = (req, res) => {
-  Card.create(req.body)
-    .then((data) =>
-      res.status(200).json({ message: "Card created successfully", data })
+
+  const card = new Card({
+    card: req.body.card,
+    });
+    card.save()
+    .then((card) =>
+      res.status(200).json({ message: "Card created successfully", card })
     )
     .catch((err) =>
       res.status(404).json({ message: "card not created", error: err.message })
@@ -18,9 +22,9 @@ exports.addCard = (req, res) => {
 };
 
 exports.updateCard = (req, res) => {
-  Todo.findByIdAndUpdate(req.params.id, req.body)
-    .then((data) =>
-      res.status(200).json({ message: "Card updated successfully", data })
+  Card.findByIdAndUpdate(req.params.id, req.body)
+    .then((card) =>
+      res.status(200).json({ message: "Card updated successfully", card })
     )
     .catch((err) =>
       res.status(404).json({ message: "card not updated", error: err.message })
@@ -28,7 +32,7 @@ exports.updateCard = (req, res) => {
 };
 
 exports.deleteCard = (req, res) => {
-  Todo.findByIdAndDelete(req.params.id)
+  Card.findByIdAndDelete(req.params.id)
     .then((data) =>
       res.status(200).json({ message: "card deleted successfully" })
     )
